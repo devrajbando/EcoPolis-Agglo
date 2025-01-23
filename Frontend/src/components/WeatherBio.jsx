@@ -1,7 +1,6 @@
-import React from 'react';
+import React from "react";
 
 const WeatherBiodiversityComponent = ({ weatherData, biodiversityCount }) => {
-  
   if (!weatherData || !biodiversityCount) {
     return <p>No Data Available</p>;
   }
@@ -17,12 +16,17 @@ const WeatherBiodiversityComponent = ({ weatherData, biodiversityCount }) => {
     coord: { lon, lat },
   } = weatherData;
 
-  const weatherDescription = weather[0]?.description || 'No description available';
+  const weatherDescription =
+    weather[0]?.description || "No description available";
 
   return (
     <div className="weather-biodiversity-box p-4 bg-white shadow-lg rounded-md">
-      <h2 className="text-2xl font-bold">Weather in {name}, {country}</h2>
-      <p>Coordinates: {lat}, {lon}</p>
+      <h2 className="text-2xl font-bold">
+        Weather in {name}, {country}
+      </h2>
+      <p>
+        Coordinates: {lat}, {lon}
+      </p>
       <p>Temperature: {temp}°K</p>
       <p>Feels like: {feels_like}°K</p>
       <p>Min Temperature: {temp_min}°K</p>
@@ -30,7 +34,9 @@ const WeatherBiodiversityComponent = ({ weatherData, biodiversityCount }) => {
       <p>Pressure: {pressure} hPa</p>
       <p>Humidity: {humidity}%</p>
       <p>Weather: {weatherDescription}</p>
-      <p>Wind: {speed} m/s at {deg}°</p>
+      <p>
+        Wind: {speed} m/s at {deg}°
+      </p>
       <p>Cloudiness: {cloudiness}%</p>
       <p>Visibility: {visibility} meters</p>
       <p>Sunrise: {new Date(sunrise * 1000).toLocaleTimeString()}</p>

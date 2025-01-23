@@ -20,7 +20,7 @@ const AnimatedContent = ({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setInView(entry.isIntersecting); // Set `inView` based on intersection status
+        setInView(entry.isIntersecting);
       },
       { threshold }
     );
@@ -38,7 +38,9 @@ const AnimatedContent = ({
   const springProps = useSpring({
     transform: inView
       ? `translate${directions[direction]}(0px) scale(1)`
-      : `translate${directions[direction]}(${reverse ? `-${distance}px` : `${distance}px`}) scale(${scale})`,
+      : `translate${directions[direction]}(${
+          reverse ? `-${distance}px` : `${distance}px`
+        }) scale(${scale})`,
     opacity: animateOpacity ? (inView ? 1 : initialOpacity) : 1,
     config,
   });

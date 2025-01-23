@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 import { sendMsgToOpenAI } from "../utils/OpenAI";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBXQ1fCzfWAlu3QCUYc161lpVm0EpY9_x4",
+  apiKey: import.meta.env.VITE_APP_API_KEY,
   authDomain: "mychatapp-76ac5.firebaseapp.com",
   projectId: "mychatapp-76ac5",
   storageBucket: "mychatapp-76ac5.firebasestorage.app",
@@ -13,7 +13,6 @@ const firebaseConfig = {
   measurementId: "G-NS1P4HL7Z4",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 const Chat = ({setIsSidebarOpen,isSidebarOpen}) => {
@@ -32,27 +31,22 @@ const Chat = ({setIsSidebarOpen,isSidebarOpen}) => {
   };
 
   const handleSend = async () => {
-      if (!input.trim()) return; // Prevent empty messages
+      if (!input.trim()) return;
   
       try {
-        // Add user message to the chat
         const updatedMessages = [...messages, { text: input, isBot: false }];
         setMessages(updatedMessages);
         localStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
   
-        // Get response from OpenAI
         const res = await sendMsgToOpenAI(input);
   
-        // Add bot response to the chat
         const finalMessages = [...updatedMessages, { text: res, isBot: true }];
         setMessages(finalMessages);
         localStorage.setItem("chatMessages", JSON.stringify(finalMessages));
   
-        // Clear input after sending
         setInput("");
       } catch (error) {
         console.error("Error in handleSend:", error);
-        // Add error message to chat
         const errorMessages = [
           ...messages,
           {
@@ -77,7 +71,6 @@ const Chat = ({setIsSidebarOpen,isSidebarOpen}) => {
           className="absolute top-5 left-5 text-black"
         />
   
-        {/* Messages Container */}
         <div
           className="overflow-y-auto p-4"
           style={{ height: "calc(100% - 230px)" }}
@@ -103,7 +96,6 @@ const Chat = ({setIsSidebarOpen,isSidebarOpen}) => {
           ))}
         </div>
   
-        {/* Textarea Container */}
         <div className="p-4 absolute bottom-0 w-full">
           <textarea
             className="w-full h-32 p-2 border rounded-md resize-none focus:outline-none bg-gray-200 text-black"

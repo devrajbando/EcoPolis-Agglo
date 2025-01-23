@@ -1,14 +1,12 @@
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey:
-    "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",
+  apiKey: import.meta.env.CHATGPT_API_KEY || "My Api Key",
   dangerouslyAllowBrowser: true,
 });
 
 export async function sendMsgToOpenAI(message) {
   try {
-    // Get conversation history from localStorage
     const savedMessages = localStorage.getItem("chatMessages");
     const messageHistory = savedMessages ? JSON.parse(savedMessages) : [];
     console.log("chat history: ",messageHistory);
@@ -44,7 +42,7 @@ console.log(weatherReport);
     ];
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Changed from gpt-4o-mini as it's not a valid model
+      model: "gpt-4o-mini",
       messages: formattedMessages,
       temperature: 0.1,
       max_tokens: 200,

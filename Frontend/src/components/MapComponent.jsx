@@ -1,25 +1,45 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { MapContainer, TileLayer, Marker, Tooltip, Rectangle, useMapEvent, useMap, Popup, Circle } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { POSITION_CLASSES, MouseMoveComponent, SetViewOnClick } from '../utils/MapUtils';
-import Chat from './ChatBot';
-import MapClickHandler from './MapClickHandler';
-import WeatherBiodiversityComponent from './WeatherBio';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Tooltip,
+  Rectangle,
+  useMapEvent,
+  useMap,
+  Popup,
+  Circle,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import {
+  POSITION_CLASSES,
+  MouseMoveComponent,
+  SetViewOnClick,
+} from "../utils/MapUtils";
+import Chat from "./ChatBot";
+import MapClickHandler from "./MapClickHandler";
+import WeatherBiodiversityComponent from "./WeatherBio";
 
 const BOUNDS_STYLE = { weight: 1 };
-const redOptions = { color: 'red' };
+const redOptions = { color: "red" };
 
 function MinimapBounds({ parentMap, zoom }) {
   const minimap = useMap();
-  
+
   const onClick = useCallback(
     (e) => {
       parentMap.setView(e.latlng, parentMap.getZoom());
     },
-    [parentMap],
+    [parentMap]
   );
 
-  useMapEvent('click', onClick);
+  useMapEvent("click", onClick);
 
   const [bounds, setBounds] = useState(parentMap.getBounds());
 
@@ -29,12 +49,12 @@ function MinimapBounds({ parentMap, zoom }) {
       minimap.setView(parentMap.getCenter(), zoom);
     };
 
-    parentMap.on('move', onChange);
-    parentMap.on('zoom', onChange);
+    parentMap.on("move", onChange);
+    parentMap.on("zoom", onChange);
 
     return () => {
-      parentMap.off('move', onChange);
-      parentMap.off('zoom', onChange);
+      parentMap.off("move", onChange);
+      parentMap.off("zoom", onChange);
     };
   }, [minimap, parentMap, zoom]);
 
@@ -61,10 +81,11 @@ function MinimapControl({ position, zoom }) {
         <MinimapBounds parentMap={parentMap} zoom={mapZoom} />
       </MapContainer>
     ),
-    [parentMap, mapZoom],
+    [parentMap, mapZoom]
   );
 
-  const positionClass = (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright;
+  const positionClass =
+    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright;
 
   return (
     <div className={positionClass}>
@@ -81,9 +102,12 @@ const MapComponent = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const [lat, setLat] = useState(23.81);
   const [lon, setLon] = useState(86.44);
   const [search, setSearch] = useState("Dhanbad");
-  const [allData, setAllData] = useState({ biodiversityCount: null, weather: null });
+  const [allData, setAllData] = useState({
+    biodiversityCount: null,
+    weather: null,
+  });
   const [clickedPoint, setClickedPoint] = useState(null);
-  const [score,setScore] = useState("");
+  const [score, setScore] = useState("");
 
   const handleMouseMove = (e) => {
     const { lat, lng } = e.latlng;
@@ -102,7 +126,10 @@ const MapComponent = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   const searchLocation = async () => {
     const token = import.meta.env.VITE_APP_GEOCODING_API_KEY;
-    const response = await fetch(`https://geocode.maps.co/search?q=${search}&api_key=${token}`, { method: 'GET' });
+    const response = await fetch(
+      `https://geocode.maps.co/search?q=${search}&api_key=${token}`,
+      { method: "GET" }
+    );
     const data = await response.json();
     setAllData({ biodiversityCount: null, weather: null });
     setLat(data[0].lat);
@@ -128,7 +155,9 @@ const MapComponent = ({ isSidebarOpen, setIsSidebarOpen }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <Marker position={[lat, lon]}>
-          <Tooltip direction="bottom" permanent>{search}</Tooltip>
+          <Tooltip direction="bottom" permanent>
+            {search}
+          </Tooltip>
         </Marker>
         <MapUpdater lat={lat} lon={lon} />
         <SetViewOnClick animateRef={animateRef} />
@@ -137,7 +166,15 @@ const MapComponent = ({ isSidebarOpen, setIsSidebarOpen }) => {
         <Circle center={[lat, lon]} pathOptions={redOptions} radius={200}>
           <Popup>Popup in CircleMarker</Popup>
         </Circle>
-        <MapClickHandler setIsSidebarOpen={setIsSidebarOpen} setAllData={setAllData} allData={allData} clickedPoint={clickedPoint} setClickedPoint={setClickedPoint} selectedRadio={selectedRadio} setScore={setScore}/>
+        <MapClickHandler
+          setIsSidebarOpen={setIsSidebarOpen}
+          setAllData={setAllData}
+          allData={allData}
+          clickedPoint={clickedPoint}
+          setClickedPoint={setClickedPoint}
+          selectedRadio={selectedRadio}
+          setScore={setScore}
+        />
       </MapContainer>
 
       <div className="absolute top-2 left-14 w-[210px] h-[50px] z-20 flex items-center justify-center bg-gradient-to-b from-[#257548] to-[#25f1ad] rounded-full overflow-hidden shadow-md cursor-pointer">
@@ -166,19 +203,21 @@ const MapComponent = ({ isSidebarOpen, setIsSidebarOpen }) => {
       </select>
 
       <div className="absolute top-28 left-3 bg-white/80 border border-gray-300 rounded-md p-5 shadow-md z-10">
-        <h2 className='font-bold text-black'>Use Case</h2>
-        {["Agricultural", "Residential", "Commercial", "Eco-friendly"].map((value) => (
-          <label key={value} className="flex items-center space-x-2">
-            <input
-              type="radio"
-              value={value}
-              checked={selectedRadio === value}
-              onChange={() => handleRadioChange(value)}
-              className="form-radio"
-            />
-            <span>{value}</span>
-          </label>
-        ))}
+        <h2 className="font-bold text-black">Use Case</h2>
+        {["Agricultural", "Residential", "Commercial", "Eco-friendly"].map(
+          (value) => (
+            <label key={value} className="flex items-center space-x-2">
+              <input
+                type="radio"
+                value={value}
+                checked={selectedRadio === value}
+                onChange={() => handleRadioChange(value)}
+                className="form-radio"
+              />
+              <span>{value}</span>
+            </label>
+          )
+        )}
       </div>
 
       <div className="absolute bottom-20 left-4 bg-white/80 p-2 rounded-md shadow-md z-10">
@@ -187,14 +226,20 @@ const MapComponent = ({ isSidebarOpen, setIsSidebarOpen }) => {
             Latitude: {coordinates.lat}, Longitude: {coordinates.lng}
           </p>
         ) : (
-          <p className="text-sm">Move the mouse over the map to get coordinates!</p>
+          <p className="text-sm">
+            Move the mouse over the map to get coordinates!
+          </p>
         )}
       </div>
-      <div className='absolute bottom-36 left-4 z-10 bg-white/80 p-2 rounded-md shadow-md'>
-        <WeatherBiodiversityComponent weatherData={allData.weather} biodiversityCount={allData.biodiversityCount}/>
+      <div className="absolute bottom-36 left-4 z-10 bg-white/80 p-2 rounded-md shadow-md">
+        <WeatherBiodiversityComponent
+          weatherData={allData.weather}
+          biodiversityCount={allData.biodiversityCount}
+        />
       </div>
-      <div className='absolute top-36 left-64 z-10 bg-white/80 p-2 rounded-md shadow-md'>
-        Score:{score.risk_score_prediction}<br></br>
+      <div className="absolute top-36 left-64 z-10 bg-white/80 p-2 rounded-md shadow-md">
+        Score:{score.risk_score_prediction}
+        <br></br>
         {/* shap_analysis:{score.shap_analysis.explanation} */}
       </div>
       <Chat setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />
