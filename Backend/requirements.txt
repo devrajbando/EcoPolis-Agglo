@@ -9,3 +9,4 @@ shapely>=1.8.0
 shap>=0.40.0
 typing>=3.7.4
 python-dateutil>=2.8.2
+osmnx>=2.0.1

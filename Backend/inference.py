@@ -314,13 +314,13 @@ dataset = create_dataset(regions, land_use_types)
 # #         'longitude':75.92,
 # #         'use_case_type':'Agricultural'}
 
-with open(f'/Users/samarthjindal/Desktop/Agglo-Ecopolis/src/models2-4.pkl', 'rb') as f:
+with open(f'./pkl_files/models2-4.pkl', 'rb') as f:
     loaded_models = pickle.load(f)
 
-with open(f'/Users/samarthjindal/Desktop/Agglo-Ecopolis/src/ensemble_weights2.pkl', 'rb') as f:
+with open(f'./pkl_files/ensemble_weights2.pkl', 'rb') as f:
     loaded_weights = pickle.load(f)
     
-with open(f'/Users/samarthjindal/Desktop/Agglo-Ecopolis/src/preprocessors2-4.pkl', 'rb') as f:
+with open(f'./pkl_files/preprocessors2-4.pkl', 'rb') as f:
     loaded_encoders, loaded_scaler = pickle.load(f)
 
 # latitude = cache['latitude']
